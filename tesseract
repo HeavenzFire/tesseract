@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
+# Define vertices of a 4D hypercube (tesseract)
+vertices = np.array([[x, y, z, w] for x in  [#agent_source#](0) [#agent_source#](1) for y in  [#agent_source#](0) [#agent_source#](1) for z in  [#agent_source#](0) [#agent_source#](1) for w in  [#agent_source#](0) [#agent_source#](1)])
+
+# To visualize the tesseract in 3D, we can project it
+# Here we will use a simple projection by ignoring one of the dimensions
+def project_to_3d(vertices, ignore_dim=3):
+    return np.delete(vertices, ignore_dim, axis=1)
+
+# Project the vertices to 3D
+projected_vertices = project_to_3d(vertices)
+
+# Create a 3D plot
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Create edges for the tesseract
+edges = []
+for i in range(len(vertices)):
+    for j in range(i + 1, len(vertices)):
+        if np.sum(np.abs(vertices[i] - vertices[j])) == 1:  # Check if they are connected
+            edges.append([projected_vertices[i], projected_vertices[j]])
+
+# Plot the edges
+ax.add_collection3d(Poly3DCollection(edges, facecolors='cyan', linewidths=1, edgecolors='r', alpha=.25))
+
+# Set limits and labels
+ax.set_xlabel('X axis')
+ax.set_ylabel('Y axis')
+ax.set_zlabel('Z axis')
+ax.set_title('3D Projection of a 4D Hypercube (Tesseract)')
+
+plt.show()
